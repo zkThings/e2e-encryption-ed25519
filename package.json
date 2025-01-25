@@ -1,0 +1,52 @@
+{
+  "name": "@zkthings/e2e-encryption-ed25519",
+  "version": "0.1.0",
+  "description": "End-to-end encryption using ed25519 keys (compatible with solana, starknet, etc)",
+  "module": "src/index.ts",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkThings/e2e-encryption-ed25519.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zkThings/e2e-encryption-ed25519/issues"
+  },
+  "homepage": "https://zksdk.io",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "encryption",
+    "ed25519",
+    "e2e",
+    "privacy",
+    "zkthings",
+    "private-data",
+    "wallet",
+    "solana",
+    "starknet"
+  ],
+  "author": "Nandan Joshi",
+  "license": "MIT",
+  "scripts": {
+    "build": "bun build --target=node ./src/index.ts --outfile=dist/index.js && bun run build:declaration",
+    "build:declaration": "tsc --emitDeclarationOnly --project tsconfig.types.json",
+    "postbuild": "rimraf tsconfig.types.tsbuildinfo",
+    "lint": "eslint"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/bun": "latest",
+    "eslint": "^9.18.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "typescript-eslint": "^8.21.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "winston": "^3.17.0"
+  }
+}
