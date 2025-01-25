@@ -47,6 +47,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@noble/curves": "^1.8.1",
+    "@noble/ed25519": "^2.2.3",
     "winston": "^3.17.0"
   }
 }

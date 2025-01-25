@@ -1,2 +1,5 @@
-// eslint-disable-next-line no-console
-console.log('Hello e2e encryption!');
+import { ed25519E2E } from './encyrption/ed25519E2E';
+
+module.exports = {
+  ed25519E2E,
+};
