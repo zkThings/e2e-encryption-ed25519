@@ -21,24 +21,20 @@ bun install @zkthings/e2e-encryption-ed25519
 ## Usage
 
 ```typescript
-import Ed25519E2E from '@zkthings/e2e-encryption-ed25519';
+import { Ed25519E2E } from '@zkthings/e2e-encryption-ed25519';
 
 // Initialize
 const e2e = new Ed25519E2E();
 
 // Encrypt data
-const encrypted = await e2e.encrypt(
+const encrypted = await e2e.encryptFor(
   'Hello, World!',
   '0x1234...', // recipient address
   publicKey    // recipient's Ed25519 public key
 );
 
 // Decrypt data
-const decrypted = await e2e.decrypt({
-  publicSignals: encrypted.publicSignals,
-  privateKey: '0x...', // your private key
-  type: 'user'         // or 'notary'
-});
+const decrypted = await e2e.decrypt(encrypted, privateKey);
 ```
 
 ## Development

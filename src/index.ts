@@ -1,5 +1,4 @@
-import { ed25519E2E } from './encyrption/ed25519E2E';
+import Ed25519E2E from './encryption/ed25519E2E';
 
-module.exports = {
-  ed25519E2E,
-};
+export { Ed25519E2E };
+export default Ed25519E2E;

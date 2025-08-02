@@ -1,8 +1,8 @@
 import * as ed25519 from '@noble/ed25519';
 import { describe, expect, test } from 'bun:test';
 import crypto from 'node:crypto';
-import type { PublicSignals } from '../src/encyrption/ed25519E2E';
-import Ed25519E2E from '../src/encyrption/ed25519E2E';
+import type { PublicSignals } from '../src/encryption/ed25519E2E';
+import Ed25519E2E from '../src/encryption/ed25519E2E';
 
 // Set SHA-512 implementation for ed25519
 ed25519.etc.sha512Sync = (...m: Uint8Array[]): Uint8Array => {
@@ -28,7 +28,7 @@ describe('Ed25519E2E', () => {
     const recipientAddress = '0x1234567890123456789012345678901234567890';
 
     // Encrypt the data
-    const encrypted = await e2e.encrypt(testData, recipientAddress, publicKey);
+    const encrypted = await e2e.encryptFor(testData, recipientAddress, publicKey);
 
     // Verify the encrypted result structure
     expect(encrypted).toHaveProperty('publicSignals');
@@ -62,7 +62,7 @@ describe('Ed25519E2E', () => {
     ];
 
     for (const { input, expected } of testCases) {
-      const encrypted = await e2e.encrypt(input, recipientAddress, publicKey);
+      const encrypted = await e2e.encryptFor(input, recipientAddress, publicKey);
 
       const decrypted = await e2e.decrypt({
         publicSignals: encrypted.publicSignals,
@@ -78,7 +78,7 @@ describe('Ed25519E2E', () => {
     const { publicKey } = await generateKeyPair();
     // const recipientAddress = '0x1234567890123456789012345678901234567890';
 
-    await expect(e2e.encrypt(null, '', publicKey)).rejects.toThrow('Invalid input');
+    await expect(e2e.encryptFor(null, '', publicKey)).rejects.toThrow('Invalid input');
   });
 
   test('should throw error for invalid inputs during decryption', async () => {
@@ -99,7 +99,7 @@ describe('Ed25519E2E', () => {
     const testData = 'Hello, World!';
     const recipientAddress = '0x1234567890123456789012345678901234567890';
 
-    const encrypted = await e2e.encrypt(testData, recipientAddress, publicKey);
+    const encrypted = await e2e.encryptFor(testData, recipientAddress, publicKey);
 
     // Tamper with the encrypted data
     encrypted.publicSignals.encryptedData = encrypted.publicSignals.encryptedData.replace('a', 'b');
@@ -118,7 +118,7 @@ describe('Ed25519E2E', () => {
     const testData = 'Hello, World!';
     const recipientAddress = '0x1234567890123456789012345678901234567890';
 
-    const encrypted = await e2e.encrypt(testData, recipientAddress, publicKey);
+    const encrypted = await e2e.encryptFor(testData, recipientAddress, publicKey);
 
     // Test user type
     const decryptedUser = await e2e.decrypt({

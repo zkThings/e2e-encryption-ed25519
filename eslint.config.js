@@ -7,6 +7,9 @@ import tsPlugin from 'typescript-eslint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  {
+    ignores: ['user-test.ts'],
+  },
   // Security
   securityPlugin.configs.recommended,
   {

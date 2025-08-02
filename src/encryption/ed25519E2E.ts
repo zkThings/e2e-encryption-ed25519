@@ -17,6 +17,10 @@ type DecryptParams = {
   type?: 'user' | 'notary';
 };
 
+type EncryptedData = {
+  publicSignals: PublicSignals;
+};
+
 class Ed25519E2E {
   private algorithm: crypto.CipherGCMTypes;
 
@@ -32,10 +36,10 @@ class Ed25519E2E {
    * @returns {Promise<{ publicSignals: PublicSignals }>} An object containing the encrypted data and public signals
    * @throws {Error} If the input is invalid or encryption fails
    */
-  async encrypt(
+  async encryptFor(
     data: string | number | boolean | object | null | undefined,
     recipientAddress: string,
-    recipientPublicKey?: Uint8Array | Buffer | string
+    recipientPublicKey: Uint8Array | Buffer | string
   ): Promise<{ publicSignals: PublicSignals }> {
     if (!recipientAddress || !recipientPublicKey) {
       throw new Error('Invalid input');
@@ -93,8 +97,26 @@ class Ed25519E2E {
    * @returns {Promise<string>} The decrypted data
    * @throws {Error} If the input is invalid or decryption fails
    */
-  async decrypt({ publicSignals, privateKey, type = 'user' }: DecryptParams): Promise<string> {
-    if (!publicSignals || !privateKey || !type) {
+  async decrypt(encryptedData: EncryptedData, privateKey: string): Promise<unknown>;
+  async decrypt({ publicSignals, privateKey, type = 'user' }: DecryptParams): Promise<unknown>;
+  async decrypt(encryptedDataOrParams: EncryptedData | DecryptParams, privateKey?: string): Promise<unknown> {
+    // Handle both API signatures for compatibility
+    let publicSignals: PublicSignals | { user?: PublicSignals; notary?: PublicSignals };
+    let key: string;
+    let type: 'user' | 'notary' = 'user';
+
+    if (privateKey && 'publicSignals' in encryptedDataOrParams) {
+      // Legacy API: decrypt(encryptedData, privateKey)
+      publicSignals = (encryptedDataOrParams as EncryptedData).publicSignals;
+      key = privateKey;
+    } else {
+      // New API: decrypt({ publicSignals, privateKey, type })
+      const params = encryptedDataOrParams as DecryptParams;
+      publicSignals = params.publicSignals;
+      key = params.privateKey;
+      type = params.type || 'user';
+    }
+    if (!publicSignals || !key) {
       throw new Error('Invalid input');
     }
 
@@ -108,7 +130,7 @@ class Ed25519E2E {
     this._validateSignals(signals);
 
     try {
-      const privateKeyBuffer = this._validateAndFormatPrivateKey(privateKey);
+      const privateKeyBuffer = this._validateAndFormatPrivateKey(key);
 
       // Generate shared secret using X25519
       const sharedSecret = x25519.getSharedSecret(edwardsToMontgomeryPriv(new Uint8Array(privateKeyBuffer)), edwardsToMontgomeryPub(this._toHex(signals.ephemeralPublicKey)));

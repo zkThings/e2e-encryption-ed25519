@@ -1,7 +1,8 @@
 {
   "name": "@zkthings/e2e-encryption-ed25519",
   "version": "0.1.0",
-  "description": "End-to-end encryption using ed25519 keys (compatible with solana, starknet, etc)",
+  "description": "End-to-end encryption for Solana, StarkNet & ed25519 wallets - secure data transmission with AES-256-GCM",
+  "main": "src/index.ts",
   "module": "src/index.ts",
   "type": "module",
   "repository": {
@@ -11,28 +12,36 @@
   "bugs": {
     "url": "https://github.com/zkThings/e2e-encryption-ed25519/issues"
   },
-  "homepage": "https://zksdk.io",
+  "homepage": "https://zksdk.dev",
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
-    "encryption",
-    "ed25519",
-    "e2e",
-    "privacy",
-    "zkthings",
-    "private-data",
-    "wallet",
     "solana",
-    "starknet"
+    "starknet",
+    "ed25519",
+    "encryption",
+    "e2e",
+    "end-to-end",
+    "wallet",
+    "crypto",
+    "privacy",
+    "secure",
+    "aes-256-gcm",
+    "x25519",
+    "keypair",
+    "web3",
+    "blockchain",
+    "zkthings",
+    "private-data"
   ],
   "author": "Nandan Joshi",
   "license": "MIT",
   "scripts": {
-    "build": "bun build --target=node ./src/index.ts --outfile=dist/index.js && bun run build:declaration",
-    "build:declaration": "tsc --emitDeclarationOnly --project tsconfig.types.json",
-    "postbuild": "rimraf tsconfig.types.tsbuildinfo",
-    "lint": "eslint"
+    "test": "bun test",
+    "user-test": "bun run user-test.ts",
+    "lint": "eslint",
+    "prepublishOnly": "bun test"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

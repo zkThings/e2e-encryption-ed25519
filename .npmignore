@@ -1,0 +1,14 @@
+# Test files
+__tests__/
+user-test.ts
+
+# Development files
+.vscode/
+eslint.config.js
+tsconfig.json
+bun.lockb
+node_modules/
+
+# Git files
+.git/
+.gitignore
